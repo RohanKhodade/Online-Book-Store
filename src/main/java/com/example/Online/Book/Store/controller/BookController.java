@@ -27,6 +27,7 @@ public class BookController {
     }
     // create book , delete, find, add
     @GetMapping("/{bookId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<BookDto> findBook(@PathVariable String bookId){
         BookDto bookdto=bookServices.getBook(bookId);
         return new ResponseEntity<>(bookdto, HttpStatus.OK);
@@ -38,16 +39,19 @@ public class BookController {
         return new ResponseEntity<>(bookDtoList,HttpStatus.OK);
     }
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BookDto> createBook(@RequestBody BookDto bookDto){
         BookDto bookdto=bookServices.createBook(bookDto);
         return new ResponseEntity<>(bookdto,HttpStatus.OK);
     }
     @PutMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BookDto> updateBook(@RequestBody BookDto bookDto){
         BookDto bookdto=bookServices.updateBook(bookDto);
         return new ResponseEntity<>(bookdto,HttpStatus.OK);
     }
     @DeleteMapping("/delete/{bookId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteBook(@PathVariable String bookId){
         bookServices.deleteBook(bookId);
         return new ResponseEntity<>("Book Deleted Successfully", HttpStatus.OK);

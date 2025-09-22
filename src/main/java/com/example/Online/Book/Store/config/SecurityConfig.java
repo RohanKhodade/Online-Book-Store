@@ -3,6 +3,7 @@ package com.example.Online.Book.Store.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled=true)
 public class SecurityConfig {
 
     @Bean
@@ -42,9 +44,9 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(requests->
                 requests.requestMatchers("/welcome").permitAll()
                         .anyRequest().authenticated());
-        httpSecurity.formLogin(Customizer.withDefaults());
-//        httpSecurity.sessionManagement(session->
-//                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        httpSecurity.httpBasic(Customizer.withDefaults());
+        httpSecurity.sessionManagement(session->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return httpSecurity.build();
     }
 }
