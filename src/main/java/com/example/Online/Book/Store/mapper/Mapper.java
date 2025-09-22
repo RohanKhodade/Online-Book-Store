@@ -6,7 +6,7 @@ import com.example.Online.Book.Store.entity.Book;
 public class Mapper {
 
     public static Book toBook(BookDto bookDto){
-        Book newBook=new Book(bookDto.BookId(),bookDto.name(),bookDto.price(),
+        Book newBook=new Book(bookDto.bookId(),bookDto.name(),bookDto.price(),
                 bookDto.author(),bookDto.description());
 
         return newBook;
