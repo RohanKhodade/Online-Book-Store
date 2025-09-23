@@ -20,19 +20,19 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(prePostEnabled=true)
 public class SecurityConfig {
 
-    @Bean
-    public UserDetailsService userDetailsService(){
-        UserDetails userDetails= User.withUsername("rohan")
-                .password(passwordEncoder().encode("password"))
-                .roles("USER").build();
-        UserDetails userDetailsTwo=User.withUsername("ronnie")
-                .password(passwordEncoder().encode("password"))
-                .roles("USER").build();
-        UserDetails userDetailsThree=User.withUsername("Admin")
-                .password(passwordEncoder().encode("adminOne"))
-                .roles("ADMIN").build();
-        return new InMemoryUserDetailsManager(userDetails,userDetailsTwo,userDetailsThree);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService(){
+//        UserDetails userDetails= User.withUsername("rohan")
+//                .password(passwordEncoder().encode("password"))
+//                .roles("USER").build();
+//        UserDetails userDetailsTwo=User.withUsername("ronnie")
+//                .password(passwordEncoder().encode("password"))
+//                .roles("USER").build();
+//        UserDetails userDetailsThree=User.withUsername("Admin")
+//                .password(passwordEncoder().encode("adminOne"))
+//                .roles("ADMIN").build();
+//        return new InMemoryUserDetailsManager(userDetails,userDetailsTwo,userDetailsThree);
+//    }
 
     @Bean
     PasswordEncoder passwordEncoder(){
@@ -42,7 +42,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)throws Exception{
         httpSecurity.csrf(csrfCustomizer->csrfCustomizer.disable());
         httpSecurity.authorizeHttpRequests(requests->
-                requests.requestMatchers("/welcome").permitAll()
+                requests.requestMatchers("/welcome","/userInfo/createUser").permitAll()
                         .anyRequest().authenticated());
         httpSecurity.httpBasic(Customizer.withDefaults());
         httpSecurity.sessionManagement(session->
