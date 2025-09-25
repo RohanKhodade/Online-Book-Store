@@ -4,6 +4,9 @@ import com.example.Online.Book.Store.dto.UserInfoDto;
 import com.example.Online.Book.Store.entity.UserInfo;
 import com.example.Online.Book.Store.mapper.UserInfoMapper;
 import com.example.Online.Book.Store.repo.UserInfoRepo;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +16,16 @@ import java.util.Optional;
 public class UserInfoServiceImpl implements UserInfoServices{
     UserInfoRepo userInfoRepo;
     PasswordEncoder passwordEncoder;
-    public UserInfoServiceImpl(UserInfoRepo userInfoRepo,PasswordEncoder passwordEncoder){
+    AuthenticationManager authenticationManager;
+    JwtService jwtService;
+    public UserInfoServiceImpl(UserInfoRepo userInfoRepo,
+                               PasswordEncoder passwordEncoder,
+                               AuthenticationManager authenticationManager,
+                               JwtService jwtService){
         this.userInfoRepo=userInfoRepo;
         this.passwordEncoder=passwordEncoder;
+        this.authenticationManager=authenticationManager;
+        this.jwtService=jwtService;
     }
     @Override
     public UserInfoDto createUser(UserInfoDto userInfoDto){
@@ -32,14 +42,14 @@ public class UserInfoServiceImpl implements UserInfoServices{
         return UserInfoMapper.toUserInfoDto(savedUser);
     }
     @Override
-    public String getUserInfo(String userName){
-        Optional<UserInfo> user=userInfoRepo.findByUsername(userName);
-        if (user.isPresent()){
-            UserInfoDto userDto=UserInfoMapper.toUserInfoDto(user.get());
-            String userString="";
-            userString=userDto.username()+ " "+ " "+userDto.roles();
-            return userString;
+    public String getUserInfo(UserInfoDto userInfoDto){
+        Authentication authentication=authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        userInfoDto.username(),userInfoDto.password())
+                );
+        if (authentication.isAuthenticated()){
+            return jwtService.generateToken(userInfoDto.username());
         }
-        return "";
+        return "Failure";
     }
 }

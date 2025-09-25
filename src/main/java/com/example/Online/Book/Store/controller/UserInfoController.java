@@ -17,13 +17,9 @@ public class UserInfoController {
         this.userInfoServices=userInfoServices;
     }
 
-    @GetMapping("/{userName}")
-    public ResponseEntity<String> getUser(@PathVariable String userName){
-        String userString=userInfoServices.getUserInfo(userName);
-        if(userString.length()>1){
-            return new ResponseEntity<>(userString,HttpStatus.OK);
-        }
-        return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
+    @PostMapping("/login")
+    public ResponseEntity<String> getUser(@RequestBody UserInfoDto userInfoDto){
+        return new ResponseEntity<>(userInfoServices.getUserInfo(userInfoDto),HttpStatus.OK);
     }
 
     @PostMapping("/createUser")
