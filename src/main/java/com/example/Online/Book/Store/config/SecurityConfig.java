@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -38,8 +39,11 @@ public class SecurityConfig {
 //        return new InMemoryUserDetailsManager(userDetails,userDetailsTwo,userDetailsThree);
 //    }
     UserDetailsService userDetailsService;
-    public SecurityConfig(UserDetailsService userDetailsService){
+//    JwtFilter jwtFilter;
+    public SecurityConfig(UserDetailsService userDetailsService
+                          ){
         this.userDetailsService=userDetailsService;
+//        this.jwtFilter=jwtFilter;
     }
     @Bean
     PasswordEncoder passwordEncoder(){
@@ -54,6 +58,7 @@ public class SecurityConfig {
         httpSecurity.httpBasic(Customizer.withDefaults());
         httpSecurity.sessionManagement(session->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//        httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
     @Bean

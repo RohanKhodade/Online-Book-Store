@@ -35,6 +35,12 @@ public class JwtServiceImpl implements JwtService {
                 .signWith(getKey())
                 .compact();
     }
+
+    @Override
+    public String extractUsername(String jwtToken) {
+        return "";
+    }
+
     private SecretKey getKey(){
         byte[] keyValue= Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyValue);
