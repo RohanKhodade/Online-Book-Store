@@ -31,4 +31,16 @@ An online book store application built using **Java Spring Boot**, featuring ful
 ---
 
 ## 🏗️ Project Structure
-
+│── src/main/java/com/bookstore
+│ ├── controller/ # REST Controllers
+│ ├── service/ # Service Layer
+│ ├── repository/ # Repository Layer
+│ ├── model/ # Entities (Book, User, Roles)
+│ ├── security/ # Spring Security Config
+│ └── OnlineBookStoreApplication.java
+│
+│── src/main/resources/
+│ ├── application.properties
+│ └── data.sql (optional for sample data)
+│
+└── pom.xml
